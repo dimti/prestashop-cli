@@ -115,10 +115,18 @@ class psUpdate extends stdClass {
         if (array_key_exists($name, psCli::$propfeatures)) {
             foreach (psCli::$propfeatures[$name] as $p=>$v) {
                 if ($v==psCli::P_BAD || $v==psCli::P_RO) {
-	 	    if ($dom->getElementsByTagName($p)->item(0)) {
-                    	$dom->removeChild($dom->getElementsByTagName($p)->item(0));
-		    }
+                    if ($child = $dom->getElementsByTagName($p)->item(0)) {
+                        $child->parentNode->removeChild($child);
+                    }
                 }
+            }
+        }
+        if ($associations = $dom->getElementsByTagName('associations')->item(0)) {
+            $associations->parentNode->removeChild( $associations );
+        }
+        if ($GLOBALS['object'] == 'manufacturer') {
+            if ($link_rewrite = $dom->getElementsByTagName('link_rewrite')->item(0)) {
+                $link_rewrite->parentNode->removeChild( $link_rewrite );
             }
         }
         return($obj);
